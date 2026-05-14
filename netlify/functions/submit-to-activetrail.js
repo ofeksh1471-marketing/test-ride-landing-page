@@ -51,6 +51,7 @@ const token = (process.env.ACTIVE_TRAIL_API_KEY || '').trim();
 
     const contact = {
       email: data.email,
+      group_ids: [groupId],
       status: 'Active',
       sms_status: 'Active',
       double_optin: false,
@@ -66,7 +67,7 @@ const token = (process.env.ACTIVE_TRAIL_API_KEY || '').trim();
       is_do_not_mail: !data.marketingApproved
     };
 
-    const response = await fetch(`${ACTIVE_TRAIL_BASE_URL}/groups/${groupId}/members`, {
+    const response = await fetch(`${ACTIVE_TRAIL_BASE_URL}/contacts`, {
       method: 'POST',
       headers: {
         Authorization: token,
