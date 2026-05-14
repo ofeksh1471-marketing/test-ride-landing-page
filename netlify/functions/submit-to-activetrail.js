@@ -17,6 +17,16 @@ const token = (process.env.ACTIVE_TRAIL_API_KEY || '').trim();
       body: JSON.stringify({ error: 'Missing ACTIVE_TRAIL_API_KEY' })
     };
   }
+  if (event.queryStringParameters && event.queryStringParameters.debug === '1') {
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        hasToken: Boolean(token),
+        tokenLength: token.length,
+        groupId
+      })
+    };
+  }
 
   try {
     const data = JSON.parse(event.body || '{}');
