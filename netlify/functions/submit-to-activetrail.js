@@ -1,4 +1,4 @@
-const ACTIVE_TRAIL_URL = 'https://webapi.mymarketing.co.il/api/contacts/Import';
+const ACTIVE_TRAIL_BASE_URL = 'https://webapi.mymarketing.co.il/api';
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -42,16 +42,13 @@ exports.handler = async (event) => {
       is_do_not_mail: !data.marketingApproved
     };
 
-    const response = await fetch(ACTIVE_TRAIL_URL, {
+    const response = await fetch(`${ACTIVE_TRAIL_BASE_URL}/groups/${groupId}/members`, {
       method: 'POST',
       headers: {
-        authorization: token,
+        Authorization: token,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        group: groupId,
-        contacts: [contact]
-      })
+      body: JSON.stringify(contact)
     });
 
     const responseText = await response.text();
