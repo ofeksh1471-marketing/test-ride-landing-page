@@ -67,7 +67,7 @@ const token = (process.env.ACTIVE_TRAIL_API_KEY || '').trim();
       is_do_not_mail: !data.marketingApproved
     };
 
-    const response = await fetch(`${ACTIVE_TRAIL_BASE_URL}/contacts`, {
+      const response = await fetch(`${ACTIVE_TRAIL_BASE_URL}/groups/${groupId}/members`, {
       method: 'POST',
       headers: {
         Authorization: token,
