@@ -1,4 +1,4 @@
-const ACTIVE_TRAIL_BASE_URL = 'https://webapi.mymarketing.co.il/api';
+const ACTIVE_TRAIL_BASE_URL = 'http://webapi.mymarketing.co.il/api';
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -8,7 +8,7 @@ exports.handler = async (event) => {
     };
   }
 
-  const token = process.env.ACTIVE_TRAIL_API_KEY;
+const token = (process.env.ACTIVE_TRAIL_API_KEY || '').trim();
   const groupId = Number(process.env.ACTIVE_TRAIL_GROUP_ID || '234804');
 
   if (!token) {
