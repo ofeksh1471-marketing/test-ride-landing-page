@@ -49,12 +49,10 @@ const token = (process.env.ACTIVE_TRAIL_API_KEY || '').trim();
       };
     }
 
-    const contact = {
+        const contact = {
       email: data.email,
-      group_ids: [groupId],
       status: 'None',
       sms_status: 'None',
-      double_optin: false,
       sms: data.phone || '',
       phone1: data.phone || '',
       first_name: data.firstName || '',
@@ -63,8 +61,7 @@ const token = (process.env.ACTIVE_TRAIL_API_KEY || '').trim();
       ext1: data.height || '',
       ext2: data.bikeModel || '',
       ext3: data.marketingApproved ? 'מאשר' : 'לא מאשר',
-      ext4: data.termsApproved ? 'מאשר' : 'לא מאשר',
-      is_do_not_mail: !data.marketingApproved
+      ext4: data.termsApproved ? 'מאשר' : 'לא מאשר'
     };
 
       const response = await fetch(`${ACTIVE_TRAIL_BASE_URL}/groups/${groupId}/members`, {
