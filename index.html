@@ -544,7 +544,7 @@
       <div class="divider-line"></div>
     </div>
 
-    <form id="signup-form" name="test-ride" method="POST" action="https://daa.activetrail.biz/Thanks" data-netlify="true" data-netlify-honeypot="bot-field" novalidate>
+    <form id="signup-form" name="test-ride" method="POST" action="/thank-you.html" data-netlify="true" data-netlify-honeypot="bot-field">
       <input type="hidden" name="form-name" value="test-ride" />
       <input type="hidden" name="bot-field" style="display:none" />
 
@@ -612,21 +612,49 @@
   <footer>© 2026 Recycles כל הזכויות שמורות</footer>
 
 
-  <script>
-    // Hide fallback placeholder once video loads (or hide it if VIDEO_ID was replaced)
-    const src = document.querySelector('iframe').src;
-    if (!src.includes('VIDEO_ID')) {
-      document.getElementById('fallback').style.display = 'none';
+<script>
+  // Hide fallback placeholder once video loads (or hide it if VIDEO_ID was replaced)
+  const src = document.querySelector('iframe').src;
+  if (!src.includes('VIDEO_ID')) {
+    document.getElementById('fallback').style.display = 'none';
+  }
+
+  const form = document.getElementById('signup-form');
+  const submitButton = form.querySelector('button[type="submit"]');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
     }
 
-    // Form submit handler (placeholder — connect to ActiveTrail)
-    function handleSubmit(e) {
-      e.preventDefault();
-      document.getElementById('signup-form').style.display = 'none';
-      document.getElementById('success').style.display = 'block';
-      // TODO: שלח לאקטיב טרייל
+    submitButton.disabled = true;
+    submitButton.textContent = 'שולח...';
+
+    try {
+      const formData = new FormData(form);
+
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData).toString()
+      });
+
+      if (!response.ok) {
+        throw new Error('Netlify form submission failed');
+      }
+
+      window.location.href = form.getAttribute('action');
+    } catch (error) {
+      submitButton.disabled = false;
+      submitButton.textContent = 'הרשמה';
+      alert('השליחה לא הצליחה. אפשר לנסות שוב בעוד רגע.');
     }
-  </script>
+  });
+</script>
+
 
 </body>
 </html>
