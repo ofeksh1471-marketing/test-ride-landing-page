@@ -52,8 +52,8 @@ const token = (process.env.ACTIVE_TRAIL_API_KEY || '').trim();
     const contact = {
       email: data.email,
       group_ids: [groupId],
-      status: 'Active',
-      sms_status: 'Active',
+      status: 'None',
+      sms_status: 'None',
       double_optin: false,
       sms: data.phone || '',
       phone1: data.phone || '',
