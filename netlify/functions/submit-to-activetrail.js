@@ -17,13 +17,24 @@ const token = (process.env.ACTIVE_TRAIL_API_KEY || '').trim();
       body: JSON.stringify({ error: 'Missing ACTIVE_TRAIL_API_KEY' })
     };
   }
-  if (event.queryStringParameters && event.queryStringParameters.debug === '1') {
+    if (event.queryStringParameters && event.queryStringParameters.debug === '1') {
+    const groupResponse = await fetch(`${ACTIVE_TRAIL_BASE_URL}/groups/${groupId}`, {
+      method: 'GET',
+      headers: {
+        Authorization: token
+      }
+    });
+
+    const groupResponseText = await groupResponse.text();
+
     return {
       statusCode: 200,
       body: JSON.stringify({
         hasToken: Boolean(token),
         tokenLength: token.length,
-        groupId
+        groupId,
+        groupCheckStatus: groupResponse.status,
+        groupCheckResponse: groupResponseText
       })
     };
   }
