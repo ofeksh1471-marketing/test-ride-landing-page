@@ -646,6 +646,30 @@
         throw new Error('Netlify form submission failed');
       }
 
+      try {
+        const activeTrailResponse = await fetch('/.netlify/functions/submit-to-activetrail', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            firstName: formData.get('שם-פרטי'),
+            lastName: formData.get('שם-משפחה'),
+            email: formData.get('אימייל'),
+            phone: formData.get('טלפון'),
+            city: formData.get('עיר'),
+            height: formData.get('גובה'),
+            bikeModel: formData.get('דגם-מבוקש'),
+            marketingApproved: formData.has('אישור-דיוור'),
+            termsApproved: formData.has('אישור-תנאים')
+          })
+        });
+
+        if (!activeTrailResponse.ok) {
+          console.warn('ActiveTrail submission failed');
+        }
+      } catch (activeTrailError) {
+        console.warn('ActiveTrail submission failed', activeTrailError);
+      }
+
       window.location.href = form.getAttribute('action');
     } catch (error) {
       submitButton.disabled = false;
