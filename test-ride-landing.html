@@ -305,12 +305,13 @@
     /* Photo area */
     .bike-photo {
       width: 100%;
-      height: 280px;
-      background: #f0f0f0;
+      aspect-ratio: 16 / 10;
+      min-height: 280px;
+      background: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px 20px;
+      padding: 18px 22px;
       overflow: hidden;
     }
     .bike-photo img {
@@ -325,11 +326,19 @@
     .bike-card:hover .bike-photo img { transform: scale(1.04); }
 
     /* Wild: zoom in to compensate for source whitespace */
-    .wild-ph img { transform: scale(1.28); }
-    .bike-card:hover .wild-ph img { transform: scale(1.33); }
+    .wild-ph img {
+      max-width: 108%;
+      max-height: 108%;
+      transform: scale(1.2);
+    }
+    .bike-card:hover .wild-ph img { transform: scale(1.24); }
 
     /* Rise: push gray background past 255 → becomes white */
-    .rise-ph img { filter: brightness(1.4) saturate(1.1); }
+    .rise-ph img {
+      max-width: 96%;
+      max-height: 96%;
+      filter: brightness(1.4) saturate(1.1);
+    }
 
     /* Both white background */
     .bike-photo.wild-ph,
@@ -401,6 +410,20 @@
 
     @media (max-width: 680px) {
       .bikes-grid { grid-template-columns: 1fr; }
+      .bike-photo {
+        aspect-ratio: 16 / 10;
+        min-height: 0;
+        height: auto;
+      }
+      .wild-ph img {
+        max-width: 108%;
+        max-height: 108%;
+        transform: scale(1.2);
+      }
+      .rise-ph img {
+        max-width: 96%;
+        max-height: 96%;
+      }
       .bike-specs { grid-template-columns: repeat(4, 1fr); }
     }
 
