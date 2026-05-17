@@ -57,10 +57,12 @@ exports.handler = async (event) => {
       first_name: data.firstName || '',
       last_name: data.lastName || '',
       city: data.city || '',
-      ext1: data.height || '',
-      ext2: data.bikeModel || '',
-      ext3: data.marketingApproved ? 'מאשר' : 'לא מאשר',
-      ext4: data.termsApproved ? 'מאשר' : 'לא מאשר'
+      ext3: 'Orbea',
+      ext5: data.marketingApproved ? 'מאשר' : 'לא מאשר',
+      ext6: 'חדש',
+      ext8: data.height || '',
+      ext9: data.bikeModel || '',
+      ext10: data.termsApproved ? 'מאשר' : 'לא מאשר'
     };
 
     const response = await fetch(`${ACTIVE_TRAIL_BASE_URL}/contacts/Import`, {
