@@ -52,8 +52,6 @@ exports.handler = async (event) => {
 
     const contact = {
       email: data.email,
-      status: 'None',
-      sms_status: 'None',
       sms: data.phone || '',
       phone1: data.phone || '',
       first_name: data.firstName || '',
