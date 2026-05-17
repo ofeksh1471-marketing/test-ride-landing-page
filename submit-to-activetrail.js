@@ -65,13 +65,16 @@ exports.handler = async (event) => {
       ext4: data.termsApproved ? 'מאשר' : 'לא מאשר'
     };
 
-    const response = await fetch(`${ACTIVE_TRAIL_BASE_URL}/groups/${groupId}/members`, {
+    const response = await fetch(`${ACTIVE_TRAIL_BASE_URL}/contacts/Import`, {
       method: 'POST',
       headers: {
         Authorization: token,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(contact)
+      body: JSON.stringify({
+        group: groupId,
+        contacts: [contact]
+      })
     });
 
     const responseText = await response.text();
