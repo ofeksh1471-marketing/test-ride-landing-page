@@ -31,8 +31,10 @@
     /* ── LOGO BAR ── */
     .logo-bar {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 7px;
       padding: 20px 24px;
       border-bottom: 1px solid var(--border);
       background: #fff;
@@ -41,6 +43,26 @@
       height: 46px;
       max-width: min(72vw, 280px);
       object-fit: contain;
+    }
+    .header-slogan {
+      position: relative;
+      display: inline-block;
+      color: var(--text);
+      font-size: clamp(20px, 3vw, 30px);
+      font-weight: 900;
+      line-height: 1;
+      padding: 0 10px 4px;
+    }
+    .header-slogan::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      height: 8px;
+      background: rgba(234,109,0,.16);
+      border-radius: 999px;
+      z-index: -1;
     }
 
     .privacy-link {
@@ -581,7 +603,7 @@
       color: var(--text);
       line-height: 1;
     }
-    .brand-signature strong span { color: var(--orange); }
+    .brand-signature strong span { color: var(--text); }
 
     /* ── FOOTER ── */
     footer {
@@ -619,6 +641,7 @@
   <!-- ── LOGO ── -->
   <div class="logo-bar">
     <img src="recycles-logo-horizontal.png" alt="Recycles" />
+    <div class="header-slogan">חנויות שהן רשת</div>
   </div>
 
   <!-- ── VIDEO HERO ── -->
