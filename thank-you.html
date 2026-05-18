@@ -212,6 +212,26 @@
       transform: translateY(-2px);
     }
 
+    .brand-signature {
+      margin-top: 30px;
+      padding: 34px 20px 24px;
+      text-align: center;
+    }
+    .brand-signature img {
+      height: 40px;
+      max-width: min(70vw, 250px);
+      object-fit: contain;
+      margin-bottom: 12px;
+    }
+    .brand-signature strong {
+      display: block;
+      font-size: clamp(26px, 5vw, 44px);
+      font-weight: 900;
+      color: var(--text);
+      line-height: 1;
+    }
+    .brand-signature strong span { color: var(--orange); }
+
     footer {
       margin-top: 28px;
       text-align: center;
@@ -290,6 +310,7 @@
             <label class="option-item"><input type="checkbox" name="מותגים-נוספים[]" value="Specialized" /> Specialized</label>
             <label class="option-item"><input type="checkbox" name="מותגים-נוספים[]" value="Trek" /> Trek</label>
             <label class="option-item"><input type="checkbox" name="מותגים-נוספים[]" value="KTM" /> KTM</label>
+            <label class="option-item"><input type="checkbox" name="מותגים-נוספים[]" value="Santa Cruz" /> Santa Cruz</label>
             <label class="option-item"><input type="checkbox" name="מותגים-נוספים[]" value="Norco" /> Norco</label>
             <label class="option-item"><input type="checkbox" name="מותגים-נוספים[]" value="Merida" /> Merida</label>
             <label class="option-item"><input type="checkbox" name="מותגים-נוספים[]" value="Rocky Mountain" /> Rocky Mountain</label>
@@ -318,6 +339,11 @@
     </section>
 
     <a href="index.html" class="back-btn">חזרה לדף הבית</a>
+
+    <section class="brand-signature" aria-label="Recycles">
+      <img src="recycles-logo-horizontal.png" alt="Recycles" />
+      <strong>חנויות <span>שהן רשת</span></strong>
+    </section>
   </main>
 
   <footer>© 2026 Recycles כל הזכויות שמורות</footer>

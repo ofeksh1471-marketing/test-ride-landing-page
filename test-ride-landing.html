@@ -561,6 +561,28 @@
       }
     }
 
+    /* ── BRAND SIGNATURE ── */
+    .brand-signature {
+      background: #fff;
+      border-top: 1px solid var(--border);
+      padding: 46px 24px 40px;
+      text-align: center;
+    }
+    .brand-signature img {
+      height: 42px;
+      max-width: min(70vw, 260px);
+      object-fit: contain;
+      margin-bottom: 14px;
+    }
+    .brand-signature strong {
+      display: block;
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 900;
+      color: var(--text);
+      line-height: 1;
+    }
+    .brand-signature strong span { color: var(--orange); }
+
     /* ── FOOTER ── */
     footer {
       text-align: center;
@@ -859,6 +881,13 @@
 
       <button class="stores-arrow next" type="button" data-stores-dir="next" aria-label="חנויות נוספות">›</button>
     </div>
+  </section>
+
+
+  <!-- ── BRAND SIGNATURE ── -->
+  <section class="brand-signature" aria-label="Recycles">
+    <img src="recycles-logo-horizontal.png" alt="Recycles" />
+    <strong>חנויות <span>שהן רשת</span></strong>
   </section>
 
 
