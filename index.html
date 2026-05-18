@@ -538,8 +538,16 @@
 
     @media (max-width: 680px) {
       .stores-section { padding: 46px 0 54px; }
-      .stores-carousel { padding: 0 18px; }
-      .stores-arrow { display: none; }
+      .stores-carousel { padding: 0 46px; }
+      .stores-arrow {
+        display: flex;
+        width: 36px;
+        height: 36px;
+        top: 38px;
+        font-size: 28px;
+      }
+      .stores-arrow.prev { left: 8px; }
+      .stores-arrow.next { right: 8px; }
       .stores-track {
         gap: 18px;
         padding-inline: 6px;
@@ -728,7 +736,7 @@
 
       <div class="form-row">
         <div class="form-group">
-          <input type="tel" name="טלפון" placeholder="טלפון נייד*" inputmode="numeric" required />
+          <input type="tel" name="טלפון" placeholder="טלפון נייד*" inputmode="numeric" dir="rtl" required />
         </div>
         <div class="form-group">
           <input type="text" name="עיר" placeholder="עיר מגורים*" required />
@@ -775,7 +783,7 @@
 
   <!-- ── STORES ── -->
   <section class="stores-section" aria-labelledby="stores-title">
-    <h2 class="stores-title" id="stores-title">החנויות <span>שלנו</span></h2>
+    <h2 class="stores-title" id="stores-title">חנויות <span>Recycles</span></h2>
 
     <div class="stores-carousel">
       <button class="stores-arrow prev" type="button" data-stores-dir="prev" aria-label="חנויות קודמות">‹</button>
