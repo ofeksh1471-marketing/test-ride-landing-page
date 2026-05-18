@@ -31,38 +31,16 @@
     /* ── LOGO BAR ── */
     .logo-bar {
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 7px;
-      padding: 20px 24px;
+      padding: 16px 24px;
       border-bottom: 1px solid var(--border);
       background: #fff;
     }
     .logo-bar img {
-      height: 46px;
+      height: 92px;
       max-width: min(72vw, 280px);
       object-fit: contain;
-    }
-    .header-slogan {
-      position: relative;
-      display: inline-block;
-      color: var(--text);
-      font-size: clamp(20px, 3vw, 30px);
-      font-weight: 900;
-      line-height: 1;
-      padding: 0 10px 4px;
-    }
-    .header-slogan::after {
-      content: "";
-      position: absolute;
-      right: 0;
-      left: 0;
-      bottom: 0;
-      height: 8px;
-      background: rgba(234,109,0,.16);
-      border-radius: 999px;
-      z-index: -1;
     }
 
     .privacy-link {
@@ -583,28 +561,6 @@
       }
     }
 
-    /* ── BRAND SIGNATURE ── */
-    .brand-signature {
-      background: #fff;
-      border-top: 1px solid var(--border);
-      padding: 46px 24px 40px;
-      text-align: center;
-    }
-    .brand-signature img {
-      height: 42px;
-      max-width: min(70vw, 260px);
-      object-fit: contain;
-      margin-bottom: 14px;
-    }
-    .brand-signature strong {
-      display: block;
-      font-size: clamp(28px, 5vw, 52px);
-      font-weight: 900;
-      color: var(--text);
-      line-height: 1;
-    }
-    .brand-signature strong span { color: var(--text); }
-
     /* ── FOOTER ── */
     footer {
       text-align: center;
@@ -640,8 +596,7 @@
 
   <!-- ── LOGO ── -->
   <div class="logo-bar">
-    <img src="recycles-logo-horizontal.png" alt="Recycles" />
-    <div class="header-slogan">חנויות שהן רשת</div>
+    <img src="recycles-logo-full.png" alt="Recycles - חנויות שהן רשת" />
   </div>
 
   <!-- ── VIDEO HERO ── -->
@@ -904,13 +859,6 @@
 
       <button class="stores-arrow next" type="button" data-stores-dir="next" aria-label="חנויות נוספות">›</button>
     </div>
-  </section>
-
-
-  <!-- ── BRAND SIGNATURE ── -->
-  <section class="brand-signature" aria-label="Recycles">
-    <img src="recycles-logo-horizontal.png" alt="Recycles" />
-    <strong>חנויות <span>שהן רשת</span></strong>
   </section>
 
 
