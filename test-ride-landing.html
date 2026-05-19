@@ -61,22 +61,26 @@
       overflow: hidden;
     }
 
-    .video-hero iframe,
+    .desktop-hero-video,
     .mobile-hero-video {
       position: absolute;
       top: 50%; left: 50%;
       width: 100%;
-      height: 56.25vw;
+      height: 100%;
       min-width: 100%;
       min-height: 100%;
       transform: translate(-50%, -50%);
       pointer-events: none;
       border: 0;
+      object-fit: cover;
+    }
+
+    .desktop-hero-video {
+      display: block;
     }
 
     .mobile-hero-video {
       display: none;
-      object-fit: cover;
     }
 
     /* Fallback placeholder shown when no video ID */
@@ -577,7 +581,7 @@
         aspect-ratio: 16 / 10;
         min-height: 220px;
       }
-      .video-hero iframe {
+      .desktop-hero-video {
         display: none;
       }
       .mobile-hero-video {
@@ -602,18 +606,12 @@
   <!-- ── VIDEO HERO ── -->
   <div class="video-hero">
 
-    <!--
-      🎬 הוסף כאן את ה-VIDEO_ID מ-YouTube שלך (2 מקומות).
-      דוגמה: youtube.com/watch?v=abc123  →  החלף VIDEO_ID ב-abc123
-    -->
-    <iframe
-      src="https://www.youtube.com/embed/FcMlEr0UPKs?autoplay=1&mute=1&loop=1&controls=0&rel=0&showinfo=0&iv_load_policy=3&modestbranding=1&playsinline=1&playlist=FcMlEr0UPKs"
-      allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-      title="background video"
-    ></iframe>
+    <video class="desktop-hero-video" autoplay muted loop playsinline preload="auto" aria-label="Orbea test ride video">
+      <source src="hero-desktop.mp4" type="video/mp4" />
+    </video>
 
-    <video class="mobile-hero-video" autoplay muted loop playsinline preload="metadata" aria-label="Orbea test ride video">
-      <source src="mobile-hero-2.mp4" type="video/mp4" />
+    <video class="mobile-hero-video" autoplay muted loop playsinline preload="auto" aria-label="Orbea test ride mobile video">
+      <source src="hero-mobile.mp4" type="video/mp4" />
     </video>
 
     <!-- מוצג כל עוד אין וידאו תקין -->
@@ -867,11 +865,13 @@
 
 
 <script>
-  // Hide fallback placeholder once video loads (or hide it if VIDEO_ID was replaced)
-  const src = document.querySelector('iframe').src;
-  if (!src.includes('VIDEO_ID')) {
-    document.getElementById('fallback').style.display = 'none';
-  }
+  // Hide fallback placeholder once the local hero video starts loading.
+  const fallback = document.getElementById('fallback');
+  document.querySelectorAll('.desktop-hero-video, .mobile-hero-video').forEach(function (video) {
+    video.addEventListener('loadeddata', function () {
+      fallback.style.display = 'none';
+    });
+  });
 
   const form = document.getElementById('signup-form');
   const submitButton = form.querySelector('button[type="submit"]');
