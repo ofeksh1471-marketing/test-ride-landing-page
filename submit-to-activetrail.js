@@ -73,20 +73,11 @@ exports.handler = async (event) => {
     }
 
     const contact = {
-      subscriptionStatus: true,
       email: data.email,
       sms: normalizeSmsPhone(data.phone),
-      phone1: data.phone || '',
       first_name: data.firstName || '',
       last_name: data.lastName || '',
-      is_deleted: false,
-      city: data.city || '',
-      ext3: 'Orbea',
-      ext5: data.marketingApproved ? 'מאשר' : 'לא מאשר',
-      ext6: 'חדש',
-      ext8: data.height || '',
-      ext9: data.bikeModel || '',
-      ext10: data.termsApproved ? 'מאשר' : 'לא מאשר'
+      is_deleted: false
     };
 
     const response = await fetch(`${ACTIVE_TRAIL_BASE_URL}/external/import`, {
@@ -101,7 +92,7 @@ exports.handler = async (event) => {
           {
             contact,
             externalId: data.email,
-            externalName: 'Orbea Test Ride'
+            externalName: 'RecyclesOrbeaTestRide'
           }
         ]
       })
