@@ -1,4 +1,4 @@
-const ACTIVE_TRAIL_BASE_URL = 'http://webapi.mymarketing.co.il/api';
+const ACTIVE_TRAIL_BASE_URL = 'https://webapi.mymarketing.co.il/api';
 
 function normalizeSmsPhone(phone) {
   const cleanPhone = String(phone || '').trim().replace(/[\s-]/g, '');
@@ -73,11 +73,13 @@ exports.handler = async (event) => {
     }
 
     const contact = {
+      subscriptionStatus: true,
       email: data.email,
       sms: normalizeSmsPhone(data.phone),
       phone1: data.phone || '',
       first_name: data.firstName || '',
       last_name: data.lastName || '',
+      is_deleted: false,
       city: data.city || '',
       ext3: 'Orbea',
       ext5: data.marketingApproved ? 'מאשר' : 'לא מאשר',
