@@ -80,57 +80,57 @@ exports.handler = async (event) => {
       is_deleted: false
     };
 
-    // שלב 1: יצירה/עדכון של איש הקשר
-    const upsertResponse = await fetch(`${ACTIVE_TRAIL_BASE_URL}/contacts`, {
-      method: 'PUT',
-      headers: {
-        Authorization: token,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(contact)
-    });
+    // externalId חייב להיות מספר — משתמשים בטיימסטמפ
+    const externalId = String(Date.now());
 
-    const upsertText = await upsertResponse.text();
+    const activeTrailPayload = {
+      group: groupId,
+      contacts: [
+        {
+          contact,
+          externalId,
+          externalName: 'RecyclesOrbeaTestRide'
+        }
+      ]
+    };
 
-    if (!upsertResponse.ok) {
-      return {
-        statusCode: upsertResponse.status,
-        body: JSON.stringify({
-          error: 'ActiveTrail contact upsert failed',
-          details: upsertText
-        })
-      };
-    }
-
-    const upsertData = JSON.parse(upsertText);
-    const contactId = upsertData.id;
-
-    // שלב 2: הוספה לקבוצה
-    const groupResponse = await fetch(`${ACTIVE_TRAIL_BASE_URL}/contacts/${contactId}/groups/${groupId}`, {
+    const response = await fetch(`${ACTIVE_TRAIL_BASE_URL}/external/import`, {
       method: 'POST',
       headers: {
         Authorization: token,
         'Content-Type': 'application/json'
-      }
+      },
+      body: JSON.stringify(activeTrailPayload)
     });
 
-    const groupResponseText = await groupResponse.text();
+    const responseText = await response.text();
 
-    if (!groupResponse.ok) {
+    if (!response.ok) {
       return {
-        statusCode: groupResponse.status,
+        statusCode: response.status,
         body: JSON.stringify({
-          error: 'ActiveTrail group assignment failed',
-          details: groupResponseText
+          error: 'ActiveTrail request failed',
+          details: responseText
+        })
+      };
+    }
+
+    const responseData = JSON.parse(responseText);
+
+    if (responseData.contact_errors && responseData.contact_errors.length > 0) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          error: 'Contact import error',
+          details: responseData.contact_errors
         })
       };
     }
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ ok: true, contactId })
+      body: JSON.stringify({ ok: true, data: responseData })
     };
-
   } catch (error) {
     return {
       statusCode: 500,
