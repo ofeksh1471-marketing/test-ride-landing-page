@@ -1,5 +1,27 @@
 const ACTIVE_TRAIL_BASE_URL = 'http://webapi.mymarketing.co.il/api';
 
+function normalizeSmsPhone(phone) {
+  const cleanPhone = String(phone || '').trim().replace(/[\s-]/g, '');
+
+  if (!cleanPhone) {
+    return '';
+  }
+
+  if (cleanPhone.startsWith('+')) {
+    return cleanPhone;
+  }
+
+  if (cleanPhone.startsWith('972')) {
+    return `+${cleanPhone}`;
+  }
+
+  if (cleanPhone.startsWith('0')) {
+    return `+972${cleanPhone.slice(1)}`;
+  }
+
+  return cleanPhone;
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return {
@@ -52,7 +74,7 @@ exports.handler = async (event) => {
 
     const contact = {
       email: data.email,
-      sms: data.phone || '',
+      sms: normalizeSmsPhone(data.phone),
       phone1: data.phone || '',
       first_name: data.firstName || '',
       last_name: data.lastName || '',
@@ -65,7 +87,7 @@ exports.handler = async (event) => {
       ext10: data.termsApproved ? 'מאשר' : 'לא מאשר'
     };
 
-    const response = await fetch(`${ACTIVE_TRAIL_BASE_URL}/contacts/Import`, {
+    const response = await fetch(`${ACTIVE_TRAIL_BASE_URL}/external/import`, {
       method: 'POST',
       headers: {
         Authorization: token,
@@ -73,7 +95,13 @@ exports.handler = async (event) => {
       },
       body: JSON.stringify({
         group: groupId,
-        contacts: [contact]
+        contacts: [
+          {
+            contact,
+            externalId: data.email,
+            externalName: 'Orbea Test Ride'
+          }
+        ]
       })
     });
 
