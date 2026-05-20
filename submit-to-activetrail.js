@@ -80,22 +80,31 @@ exports.handler = async (event) => {
       is_deleted: false
     };
 
+    const activeTrailPayload = {
+      group: groupId,
+      contacts: [
+        {
+          contact,
+          externalId: data.email,
+          externalName: 'RecyclesOrbeaTestRide'
+        }
+      ]
+    };
+
+    if (event.queryStringParameters && event.queryStringParameters.debug === 'payload') {
+      return {
+        statusCode: 200,
+        body: JSON.stringify(activeTrailPayload, null, 2)
+      };
+    }
+
     const response = await fetch(`${ACTIVE_TRAIL_BASE_URL}/external/import`, {
       method: 'POST',
       headers: {
         Authorization: token,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        group: groupId,
-        contacts: [
-          {
-            contact,
-            externalId: data.email,
-            externalName: 'RecyclesOrbeaTestRide'
-          }
-        ]
-      })
+      body: JSON.stringify(activeTrailPayload)
     });
 
     const responseText = await response.text();
