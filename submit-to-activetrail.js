@@ -80,7 +80,6 @@ exports.handler = async (event) => {
       is_deleted: false
     };
 
-    // externalId חייב להיות מספר — משתמשים בטיימסטמפ
     const externalId = String(Date.now());
 
     const activeTrailPayload = {
@@ -94,10 +93,9 @@ exports.handler = async (event) => {
       ]
     };
 
-    const response = await fetch(`${ACTIVE_TRAIL_BASE_URL}/external/import`, {
+    const response = await fetch(`${ACTIVE_TRAIL_BASE_URL}/external/import?Authorization=${token}`, {
       method: 'POST',
       headers: {
-        Authorization: token,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(activeTrailPayload)
