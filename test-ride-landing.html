@@ -52,12 +52,14 @@
     }
     .privacy-link:hover { color: var(--orange); }
 
-    .floating-register {
-      position: fixed;
-      right: 18px;
-      top: 50%;
-      z-index: 20;
-      transform: translateY(-50%);
+    .top-register-wrap {
+      display: flex;
+      justify-content: flex-end;
+      width: min(1120px, calc(100% - 48px));
+      margin: 0 auto 18px;
+    }
+
+    .top-register {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -72,16 +74,16 @@
       transition: transform .2s, box-shadow .2s, background .2s;
     }
 
-    .floating-register:visited,
-    .floating-register:focus,
-    .floating-register:active {
+    .top-register:visited,
+    .top-register:focus,
+    .top-register:active {
       background: var(--orange);
       color: #fff;
     }
 
-    .floating-register:hover {
+    .top-register:hover {
       background: var(--orange-dark);
-      transform: translateY(-50%) scale(1.03);
+      transform: translateY(-1px);
       box-shadow: 0 22px 44px rgba(234, 109, 0, .34);
     }
 
@@ -624,15 +626,7 @@
         min-width: 100%;
         min-height: 100%;
       }
-      .floating-register {
-        top: auto;
-        right: 16px;
-        bottom: 16px;
-        min-height: 0;
-        padding: 12px 18px;
-        border-radius: 999px;
-        font-size: 14px;
-      }
+      .top-register-wrap { display: none; }
       .video-overlay { padding: 24px; }
       .form-section { padding: 40px 16px 60px; }
     }
@@ -640,11 +634,13 @@
 </head>
 <body>
 
-  <a href="#registration-form" class="floating-register">הזמנת רכיבת מבחן</a>
-
   <!-- ── LOGO ── -->
   <div class="logo-bar">
     <img src="recycles-logo-full.png" alt="Recycles - חנויות שהן רשת" />
+  </div>
+
+  <div class="top-register-wrap">
+    <a href="#registration-form" class="top-register">הזמנת רכיבת מבחן</a>
   </div>
 
   <!-- ── VIDEO HERO ── -->
