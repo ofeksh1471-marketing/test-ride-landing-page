@@ -2,54 +2,31 @@ const ACTIVE_TRAIL_BASE_URL = 'https://webapi.mymarketing.co.il/api';
 
 function normalizeSmsPhone(phone) {
   const cleanPhone = String(phone || '').trim().replace(/[\s-]/g, '');
-
-  if (!cleanPhone) {
-    return '';
-  }
-
-  if (cleanPhone.startsWith('+')) {
-    return cleanPhone;
-  }
-
-  if (cleanPhone.startsWith('972')) {
-    return `+${cleanPhone}`;
-  }
-
-  if (cleanPhone.startsWith('0')) {
-    return `+972${cleanPhone.slice(1)}`;
-  }
-
+  if (!cleanPhone) return '';
+  if (cleanPhone.startsWith('+')) return cleanPhone;
+  if (cleanPhone.startsWith('972')) return `+${cleanPhone}`;
+  if (cleanPhone.startsWith('0')) return `+972${cleanPhone.slice(1)}`;
   return cleanPhone;
 }
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      body: JSON.stringify({ error: 'Method not allowed' })
-    };
+    return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) };
   }
 
   const token = (process.env.ACTIVE_TRAIL_API_KEY || '').trim();
   const groupId = Number(process.env.ACTIVE_TRAIL_GROUP_ID || '234804');
 
   if (!token) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Missing ACTIVE_TRAIL_API_KEY' })
-    };
+    return { statusCode: 500, body: JSON.stringify({ error: 'Missing ACTIVE_TRAIL_API_KEY' }) };
   }
 
   if (event.queryStringParameters && event.queryStringParameters.debug === '1') {
     const groupResponse = await fetch(`${ACTIVE_TRAIL_BASE_URL}/groups/${groupId}`, {
       method: 'GET',
-      headers: {
-        Authorization: token
-      }
+      headers: { Authorization: token }
     });
-
     const groupResponseText = await groupResponse.text();
-
     return {
       statusCode: 200,
       body: JSON.stringify({
@@ -66,10 +43,7 @@ exports.handler = async (event) => {
     const data = JSON.parse(event.body || '{}');
 
     if (!data.email) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: 'Missing email' })
-      };
+      return { statusCode: 400, body: JSON.stringify({ error: 'Missing email' }) };
     }
 
     const contact = {
@@ -84,18 +58,13 @@ exports.handler = async (event) => {
 
     const activeTrailPayload = {
       group: groupId,
-      contacts: [
-        {
-          contact,
-          externalId,
-          externalName: 'RecyclesOrbeaTestRide'
-        }
-      ]
+      contacts: [{ contact, externalId, externalName: 'RecyclesOrbeaTestRide' }]
     };
 
-    const response = await fetch(`${ACTIVE_TRAIL_BASE_URL}/external/import?Authorization=${token}`, {
+    const response = await fetch(`${ACTIVE_TRAIL_BASE_URL}/external/import`, {
       method: 'POST',
       headers: {
+        'AppIdToken': token,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(activeTrailPayload)
@@ -106,10 +75,7 @@ exports.handler = async (event) => {
     if (!response.ok) {
       return {
         statusCode: response.status,
-        body: JSON.stringify({
-          error: 'ActiveTrail request failed',
-          details: responseText
-        })
+        body: JSON.stringify({ error: 'ActiveTrail request failed', details: responseText })
       };
     }
 
@@ -118,24 +84,16 @@ exports.handler = async (event) => {
     if (responseData.contact_errors && responseData.contact_errors.length > 0) {
       return {
         statusCode: 400,
-        body: JSON.stringify({
-          error: 'Contact import error',
-          details: responseData.contact_errors
-        })
+        body: JSON.stringify({ error: 'Contact import error', details: responseData.contact_errors })
       };
     }
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ ok: true, data: responseData })
-    };
+    return { statusCode: 200, body: JSON.stringify({ ok: true, data: responseData }) };
+
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({
-        error: 'ActiveTrail submit failed',
-        details: error.message
-      })
+      body: JSON.stringify({ error: 'ActiveTrail submit failed', details: error.message })
     };
   }
 };
