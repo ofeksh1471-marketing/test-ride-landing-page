@@ -21,6 +21,7 @@ exports.handler = async (event) => {
     return { statusCode: 500, body: JSON.stringify({ error: 'Missing ACTIVE_TRAIL_API_KEY' }) };
   }
 
+  // debug=1: בדיקת גרופ בסיסית
   if (event.queryStringParameters && event.queryStringParameters.debug === '1') {
     const groupResponse = await fetch(`${ACTIVE_TRAIL_BASE_URL}/groups/${groupId}`, {
       method: 'GET',
@@ -39,9 +40,59 @@ exports.handler = async (event) => {
     };
   }
 
+  // debug=2: בדיקת import endpoint ישירות
+  if (event.queryStringParameters && event.queryStringParameters.debug === '2') {
+    const testPayload = {
+      group: groupId,
+      contacts: [{
+        contact: {
+          email: 'debugtest@test.com',
+          sms: '+972501234567',
+          first_name: 'Debug',
+          last_name: 'Test',
+          is_deleted: false
+        },
+        externalId: String(Date.now()),
+        externalName: 'RecyclesOrbeaTestRide'
+      }]
+    };
+
+    // ניסיון 1: Authorization header
+    const r1 = await fetch(`${ACTIVE_TRAIL_BASE_URL}/external/import`, {
+      method: 'POST',
+      headers: { Authorization: token, 'Content-Type': 'application/json' },
+      body: JSON.stringify(testPayload)
+    });
+    const t1 = await r1.text();
+
+    // ניסיון 2: AppIdToken header
+    const r2 = await fetch(`${ACTIVE_TRAIL_BASE_URL}/external/import`, {
+      method: 'POST',
+      headers: { AppIdToken: token, 'Content-Type': 'application/json' },
+      body: JSON.stringify(testPayload)
+    });
+    const t2 = await r2.text();
+
+    // ניסיון 3: query param
+    const r3 = await fetch(`${ACTIVE_TRAIL_BASE_URL}/external/import?Authorization=${token}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(testPayload)
+    });
+    const t3 = await r3.text();
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        attempt1_Authorization_header: { status: r1.status, response: t1 },
+        attempt2_AppIdToken_header: { status: r2.status, response: t2 },
+        attempt3_query_param: { status: r3.status, response: t3 }
+      }, null, 2)
+    };
+  }
+
   try {
     const data = JSON.parse(event.body || '{}');
-
     if (!data.email) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Missing email' }) };
     }
@@ -55,7 +106,6 @@ exports.handler = async (event) => {
     };
 
     const externalId = String(Date.now());
-
     const activeTrailPayload = {
       group: groupId,
       contacts: [{ contact, externalId, externalName: 'RecyclesOrbeaTestRide' }]
@@ -63,10 +113,7 @@ exports.handler = async (event) => {
 
     const response = await fetch(`${ACTIVE_TRAIL_BASE_URL}/external/import`, {
       method: 'POST',
-      headers: {
-        'AppIdToken': token,
-        'Content-Type': 'application/json'
-      },
+      headers: { Authorization: token, 'Content-Type': 'application/json' },
       body: JSON.stringify(activeTrailPayload)
     });
 
