@@ -21,8 +21,12 @@ exports.handler = async (event) => {
     return { statusCode: 500, body: JSON.stringify({ error: 'Missing ACTIVE_TRAIL_API_KEY' }) };
   }
 
+  const params = event.queryStringParameters || {};
+  const bodyData = JSON.parse(event.body || '{}');
+  const debugMode = params.debug || bodyData.debug;
+
   // debug=1: בדיקת גרופ בסיסית
-  if (event.queryStringParameters && event.queryStringParameters.debug === '1') {
+  if (debugMode === '1') {
     const groupResponse = await fetch(`${ACTIVE_TRAIL_BASE_URL}/groups/${groupId}`, {
       method: 'GET',
       headers: { Authorization: token }
@@ -40,8 +44,8 @@ exports.handler = async (event) => {
     };
   }
 
-  // debug=2: בדיקת import endpoint ישירות
-  if (event.queryStringParameters && event.queryStringParameters.debug === '2') {
+  // debug=2: בדיקת שלושת שיטות ה-auth מול import endpoint
+  if (debugMode === '2') {
     const testPayload = {
       group: groupId,
       contacts: [{
@@ -57,7 +61,6 @@ exports.handler = async (event) => {
       }]
     };
 
-    // ניסיון 1: Authorization header
     const r1 = await fetch(`${ACTIVE_TRAIL_BASE_URL}/external/import`, {
       method: 'POST',
       headers: { Authorization: token, 'Content-Type': 'application/json' },
@@ -65,7 +68,6 @@ exports.handler = async (event) => {
     });
     const t1 = await r1.text();
 
-    // ניסיון 2: AppIdToken header
     const r2 = await fetch(`${ACTIVE_TRAIL_BASE_URL}/external/import`, {
       method: 'POST',
       headers: { AppIdToken: token, 'Content-Type': 'application/json' },
@@ -73,7 +75,6 @@ exports.handler = async (event) => {
     });
     const t2 = await r2.text();
 
-    // ניסיון 3: query param
     const r3 = await fetch(`${ACTIVE_TRAIL_BASE_URL}/external/import?Authorization=${token}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -92,7 +93,8 @@ exports.handler = async (event) => {
   }
 
   try {
-    const data = JSON.parse(event.body || '{}');
+    const data = bodyData;
+
     if (!data.email) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Missing email' }) };
     }
